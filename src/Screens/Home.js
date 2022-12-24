@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
-
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
+import { auth } from '../../firebase';
 
 export default function Home({ navigation, GlobalState }) {
     const { toDoList, setToDoList, task, setTask, setChosenTask } = GlobalState;
@@ -35,10 +35,28 @@ export default function Home({ navigation, GlobalState }) {
         navigation.navigate('ChosenTask');
     }
 
+    const handleSignOut = () => {
+        auth
+            .signOut()
+            .then(() => {
+                navigation.replace('Login')
+            })
+            .catch(error => alert(error.message))
+    }
+
     return (
         <View style={styles.screen}>
             <Header />
             <View style={styles.body}>
+
+                <Text style={styles.text}>Email: {auth.currentUser?.email}</Text>
+                <TouchableOpacity 
+                    style={styles.button}
+                    onPress={() => handleSignOut()}
+                >
+                    <Text style={styles.buttonText}>Sign Out</Text>
+                </TouchableOpacity>
+            
                 <TextInput 
                     style={styles.input}
                     onChangeText={setTask}
@@ -51,11 +69,13 @@ export default function Home({ navigation, GlobalState }) {
                 >
                     <Text style={styles.buttonText}>Submit</Text>
                 </TouchableOpacity>
+                
                 <FlatList
                     data={toDoList}
                     renderItem={renderItem}
                     keyExtractor={item => item.id}
                 />
+
             </View>
             <Footer navigation={navigation}/>
         </View>
@@ -94,7 +114,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 10,
         margin: 10,
-        marginTop: 30,
+        // marginTop: 30,
         borderRadius: 12,
         shadowColor: "#000",
         shadowOffset: {
@@ -107,7 +127,7 @@ const styles = StyleSheet.create({
     },
     button: {
         alignItems: 'center',
-        backgroundColor: '#141414',
+        backgroundColor: '#4a9eff',
         padding: 15,
         paddingTop: 10,
         paddingBottom: 10,
@@ -126,5 +146,9 @@ const styles = StyleSheet.create({
     buttonText: {
         color: 'white',
         font: '900',
+    },
+    text: {
+        textAlign: 'center',
+        paddingTop: 30
     }
 })

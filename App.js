@@ -14,6 +14,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import registerNNPushToken from 'native-notify';
 
+import Login from './src/Screens/Login';
 import Home from './src/Screens/Home';
 import ChosenTask from './src/Screens/ChosenTask';
 
@@ -39,11 +40,15 @@ export default function App() {
         <NavigationContainer>
             <Stack.Navigator>
 
-                <Stack.Screen name="Home" options={{ headerShown: false }}>
+                <Stack.Screen name='Login' options={{ headerShown: false }}>
+                    {props => <Login {...props} GlobalState = {GlobalState} />}
+                </Stack.Screen>
+
+                <Stack.Screen name='Home' options={{ headerShown: false }}>
                     {props => <Home {...props} GlobalState = {GlobalState} />}
                 </Stack.Screen>
 
-                <Stack.Screen name="ChosenTask" options={{ headerShown: false }}>
+                <Stack.Screen name='ChosenTask' options={{ headerShown: false }}>
                     {props => <ChosenTask {...props} GlobalState = {GlobalState} />}
                 </Stack.Screen>
 
