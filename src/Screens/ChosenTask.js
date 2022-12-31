@@ -4,6 +4,8 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity, FlatList } from 'r
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 
+
+
 export default function ChosenTask({ navigation, GlobalState }) {
     const { chosenTask } = GlobalState;
 

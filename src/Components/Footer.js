@@ -2,6 +2,8 @@ import { StyleSheet, View, Text } from "react-native";
 
 import Icon from 'react-native-vector-icons/AntDesign';
 
+
+
 export default function Footer({ navigation }) {
     return (
         <View style={styles.footer}>

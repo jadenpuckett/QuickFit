@@ -1,6 +1,8 @@
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { auth } from '../../firebase'
+import { auth } from '../Firebase/firebase-config'
+
+
 
 export default function Login({ navigation, GlobalState }) {
 
@@ -49,13 +51,15 @@ export default function Login({ navigation, GlobalState }) {
                     onChangeText = {text => setEmail(text)}
                     style = {styles.input}
                 />
-                <TextInput
-                    placeholder = 'Password'
-                    value = {password}
-                    onChangeText = {text => setPassword(text)}
-                    style = {styles.input}
-                    secureTextEntry
-                />
+                <form> {/* advised for password fields */}
+                    <TextInput
+                        placeholder = 'Password'
+                        value = {password}
+                        onChangeText = {text => setPassword(text)}
+                        style = {styles.input}
+                        secureTextEntry
+                    />
+                </form>
             </View>
 
             <View style={styles.buttonContainer}>

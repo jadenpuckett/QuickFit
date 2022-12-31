@@ -18,6 +18,11 @@ import Login from './src/Screens/Login';
 import Home from './src/Screens/Home';
 import ChosenTask from './src/Screens/ChosenTask';
 
+import { db } from './src/Firebase/firebase-config';
+import { collection, doc, getDocs } from 'firebase/firestore';
+
+
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -25,14 +30,23 @@ export default function App() {
     registerNNPushToken(5368, '6UNQ6ckAm0sCcbBRw3DUDj');
 
     // globalstate managmenet
-    const [toDoList, setToDoList] = useState([{ id: 1, task: 'brush your teeth'}]);
-    const [task, setTask] = useState('');
-    const [chosenTask, setChosenTask] = useState('');
+    const [exercises, setExercises] = useState([]);
+
+    // function to make API call to firebase (do not make useEffect ansync - bad practice)
+    const exercisesCollectionRef = collection(db, 'Exercises');
+    useEffect(() => {
+
+        const getExercises = async () => {
+            const data = await getDocs(exercisesCollectionRef);
+            setExercises(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
+        };
+
+        getExercises();
+
+    }, []) // one call only
 
     const GlobalState = {
-        toDoList, setToDoList,
-        task, setTask,
-        chosenTask, setChosenTask
+        exercises, setExercises
     }
 
     // navigation

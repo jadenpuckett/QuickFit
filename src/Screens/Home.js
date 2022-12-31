@@ -1,39 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
-import { auth } from '../../firebase';
+import { db, auth } from '../Firebase/firebase-config';
+import AddExercise from '../Components/AddExercise';
+import { getDocs, collection, onSnapshot, query, doc } from 'firebase/firestore';
+
+
 
 export default function Home({ navigation, GlobalState }) {
-    const { toDoList, setToDoList, task, setTask, setChosenTask } = GlobalState;
+    const { exercises, setExercises } = GlobalState;
 
+    // function to make API call to firebase (do not make useEffect ansync - bad practice)
+    const exercisesCollectionRef = collection(db, 'Exercises');
     useEffect(() => {
-        setToDoList(prevState => [...prevState, { id: 2, task: 'go to bed' }])
-    }, [])
 
-    const renderItem = ({ item }) => {
-        return (
-            <TouchableOpacity
-                style={styles.task}
-                onPress={() => handleChooseTask(item)}
-            >
-                <Text>{item.task}</Text> 
-            </TouchableOpacity>
-        )
-    }
+        const getExercises = async () => {
+            const data = await getDocs(exercisesCollectionRef);
+            setExercises(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
+        };
 
-    const handleSaveTask = () => {
-        const index = toDoList.length + 1;
+        getExercises();
 
-        setToDoList(prevState => [...prevState, { id: index, task: task }])
-
-        setTask('');
-    }
-
-    const handleChooseTask = (item) => {
-        setChosenTask(item);
-        navigation.navigate('ChosenTask');
-    }
+    }) // repeated calls
 
     const handleSignOut = () => {
         auth
@@ -57,24 +47,15 @@ export default function Home({ navigation, GlobalState }) {
                     <Text style={styles.buttonText}>Sign Out</Text>
                 </TouchableOpacity>
             
-                <TextInput 
-                    style={styles.input}
-                    onChangeText={setTask}
-                    value={task}
-                    placeholder="To do task..."
-                />
-                <TouchableOpacity 
-                    style={styles.button}
-                    onPress={() => handleSaveTask()}
-                >
-                    <Text style={styles.buttonText}>Submit</Text>
-                </TouchableOpacity>
+                <AddExercise/>
                 
-                <FlatList
-                    data={toDoList}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.id}
-                />
+                {exercises.map((exercise) => {
+                    return (
+                        <TouchableOpacity style={styles.task} key={exercise.id}>
+                            <Text>Name: {exercise.name}</Text> 
+                        </TouchableOpacity>
+                    )
+                })}
 
             </View>
             <Footer navigation={navigation}/>
@@ -98,23 +79,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 10,
         margin: 10,
-        borderRadius: 12,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.23,
-        shadowRadius: 2.62,
-        elevation: 4,
-    },
-    input: {
-        backgroundColor: 'white',
-        padding: 15,
-        paddingTop: 10,
-        paddingBottom: 10,
-        margin: 10,
-        // marginTop: 30,
         borderRadius: 12,
         shadowColor: "#000",
         shadowOffset: {
