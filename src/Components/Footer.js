@@ -1,5 +1,4 @@
 import { StyleSheet, View, Text } from "react-native";
-
 import Icon from "react-native-vector-icons/AntDesign";
 
 export default function Footer({ navigation }) {
@@ -11,16 +10,24 @@ export default function Footer({ navigation }) {
         color="#141414"
         onPress={() => navigation.navigate("Home")}
       />
+      <Icon
+        name="user"
+        size={30}
+        color="#141414"
+        // onPress={() => navigation.navigate("Profile")}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   footer: {
+    paddingHorizontal: 50,
+    flexDirection: 'row',
     flex: 1,
     width: "100%",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
     backgroundColor: "white",
     shadowColor: "#000",
     shadowOffset: {

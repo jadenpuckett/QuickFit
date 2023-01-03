@@ -8,12 +8,8 @@ import AddGroup from "../Components/AddGroup";
 import { getDocs, collection } from "firebase/firestore";
 
 export default function Home({ navigation, GlobalState }) {
-  const {
-    groups,
-    setGroups,
-    setChosenGroup
-  } = GlobalState;
-  
+  const { groups, setGroups, setChosenGroup } = GlobalState;
+
   useEffect(() => {
     queryFirebase();
   }, []);

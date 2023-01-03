@@ -1,43 +1,38 @@
-import React, { useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Text, TouchableOpacity, Button } from "react-native";
 
 import WorkoutHeader from "../Components/WorkoutHeader";
 import Footer from "../Components/Footer";
-import { db, auth } from "../Firebase/firebase-config";
-import AddGroup from "../Components/AddGroup";
+import { db } from "../Firebase/firebase-config";
 import { getDocs, collection } from "firebase/firestore";
+import AddExercise from "../Components/AddExercise";
 
-export default function Home({ navigation, GlobalState }) {
+export default function GroupDetails({ route, navigation, GlobalState }) {
   const {
-    groups,
-    setGroups,
-    setChosenGroup
+    chosenGroup,
+    exercises,
+    setExercises,
+    setChosenExercise,
+    setWorkoutHeaderText,
   } = GlobalState;
-  
+  const { path } = route.params;
+
   useEffect(() => {
     queryFirebase();
   }, []);
 
   const queryFirebase = async () => {
-    console.log("Reading groups from firebase");
-    const ref = collection(db, "Groups");
+    console.log("Reading exercises from firebase");
+    const ref = collection(db, path);
     const data = await getDocs(ref);
-    setGroups(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    setExercises(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
 
-  const handleSignOut = () => {
-    auth
-      .signOut()
-      .then(() => {
-        navigation.replace("Login");
-      })
-      .catch((error) => alert(error.message));
-  };
-
-  const handleChooseGroup = (group) => {
-    setChosenGroup(group);
-    navigation.navigate("GroupDetails", {
-      path: "Groups/" + group.id + "/Exercises",
+  const handleChooseExercise = (exercise) => {
+    setChosenExercise(exercise);
+    navigation.navigate("ExerciseDetails", {
+      path:
+        "Groups/" + chosenGroup.id + "/Exercises/" + exercise.id + "/Clusters",
     });
   };
 
@@ -45,21 +40,29 @@ export default function Home({ navigation, GlobalState }) {
     <View style={styles.screen}>
       <WorkoutHeader />
       <View style={styles.body}>
-        <Text style={styles.text}>Email: {auth.currentUser?.email}</Text>
-        <TouchableOpacity style={styles.button} onPress={() => handleSignOut()}>
-          <Text style={styles.buttonText}>Sign Out</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.buttonText}>Back</Text>
         </TouchableOpacity>
 
-        <AddGroup GlobalState={GlobalState} queryFirebase={queryFirebase} />
+        <Text style={styles.text}>{chosenGroup.name}</Text>
 
-        {groups.map((group) => {
+        <AddExercise
+          GlobalState={GlobalState}
+          queryFirebase={queryFirebase}
+          chosenGroup={chosenGroup}
+        />
+
+        {exercises.map((exercise) => {
           return (
             <TouchableOpacity
               style={styles.item}
-              key={group.id}
-              onPress={() => handleChooseGroup(group)}
+              key={exercise.id}
+              onPress={() => handleChooseExercise(exercise)}
             >
-              <Text>Name: {group.name}</Text>
+              <Text>Name: {exercise.name}</Text>
             </TouchableOpacity>
           );
         })}
@@ -95,6 +98,10 @@ const styles = StyleSheet.create({
     shadowRadius: 2.62,
     elevation: 4,
   },
+  text: {
+    textAlign: "center",
+    paddingTop: 30,
+  },
   button: {
     alignItems: "center",
     backgroundColor: "black",
@@ -116,9 +123,5 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     font: "900",
-  },
-  text: {
-    textAlign: "center",
-    paddingTop: 30,
   },
 });

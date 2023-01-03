@@ -15,14 +15,12 @@ import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import registerNNPushToken from "native-notify";
+import { StyleSheet } from "react-native";
 
 import Login from "./src/Screens/Login";
 import Home from "./src/Screens/Home";
-import ExerciseDetail from "./src/Screens/ExerciseDetail";
-
-import { db } from "./src/Firebase/firebase-config";
-import { collection, doc, getDocs } from "firebase/firestore";
-import { useCollectionData } from "react-firebase-hooks/firestore";
+import GroupDetails from "./src/Screens/GroupDetails";
+import ExerciseDetails from "./src/Screens/ExerciseDetails";
 
 const Stack = createNativeStackNavigator();
 
@@ -31,28 +29,23 @@ export default function App() {
   registerNNPushToken(5368, "6UNQ6ckAm0sCcbBRw3DUDj");
 
   // globalstate managmenet
+  const [groups, setGroups] = useState([]);
+  const [chosenGroup, setChosenGroup] = useState("");
   const [exercises, setExercises] = useState([]);
-  const [chosenExercise, setChosenExercise] = useState('');
-  const [readFromFirebase, setReadFromFirebase] = useState(false);
-
-  // function to make API call to firebase (do not make useEffect ansync - bad practice)
-  const exercisesCollectionRef = collection(db, "Exercises");
-  useEffect(() => {
-    const getExercises = async () => {
-      const data = await getDocs(exercisesCollectionRef);
-      setExercises(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
-
-    getExercises();
-  }, []); // one call only
+  const [chosenExercise, setChosenExercise] = useState("");
+  const [clusters, setClusters] = useState([]);
 
   const GlobalState = {
+    groups,
+    setGroups,
+    chosenGroup,
+    setChosenGroup,
     exercises,
     setExercises,
     chosenExercise,
     setChosenExercise,
-    readFromFirebase,
-    setReadFromFirebase
+    clusters,
+    setClusters,
   };
 
   // navigation
@@ -67,8 +60,12 @@ export default function App() {
           {(props) => <Home {...props} GlobalState={GlobalState} />}
         </Stack.Screen>
 
-        <Stack.Screen name="ExerciseDetail" options={{ headerShown: false }}>
-          {(props) => <ExerciseDetail {...props} GlobalState={GlobalState} />}
+        <Stack.Screen name="GroupDetails" options={{ headerShown: false }}>
+          {(props) => <GroupDetails {...props} GlobalState={GlobalState} />}
+        </Stack.Screen>
+
+        <Stack.Screen name="ExerciseDetails" options={{ headerShown: false }}>
+          {(props) => <ExerciseDetails {...props} GlobalState={GlobalState} />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

@@ -11,22 +11,18 @@ import {
 
 import { db } from "../Firebase/firebase-config";
 
-export default function AddExercise({
-  GlobalState,
-  queryFirebase,
-  chosenGroup,
-}) {
-  const [exerciseToAdd, setExerciseToAdd] = useState("");
+export default function AddGroup({ GlobalState, queryFirebase }) {
+  const [groupToAdd, setGroupToAdd] = useState("");
 
-  const addExercise = async () => {
-    if (exerciseToAdd && exerciseToAdd.length > 0) {
-      const dbRef = collection(db, "Groups/" + chosenGroup.id + "/Exercises");
+  const addGroup = async () => {
+    if (groupToAdd && groupToAdd.length > 0) {
+      const dbRef = collection(db, "Groups");
       const data = {
-        name: exerciseToAdd,
+        name: groupToAdd,
       };
       await addDoc(dbRef, data)
         .then(() => {
-          console.log("Exercise added to firebase");
+          console.log("Group added to firebase");
           queryFirebase(); //query the firebase to refresh the items on the page
           Keyboard.dismiss();
         })
@@ -40,14 +36,14 @@ export default function AddExercise({
     <View>
       <TextInput
         style={styles.input}
-        onChangeText={(inp) => setExerciseToAdd(inp)}
-        value={exerciseToAdd}
+        onChangeText={(inp) => setGroupToAdd(inp)}
+        value={groupToAdd}
         multiline={true}
         autoCapitalize="none"
-        placeholder="Enter a new exercise name..."
+        placeholder="Enter a new group name..."
       />
-      <TouchableOpacity style={styles.button} onPress={() => addExercise()}>
-        <Text style={styles.buttonText}>Add Exercise</Text>
+      <TouchableOpacity style={styles.button} onPress={() => addGroup()}>
+        <Text style={styles.buttonText}>Add Group</Text>
       </TouchableOpacity>
     </View>
   );

@@ -1,65 +1,59 @@
-import React, { useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 
 import WorkoutHeader from "../Components/WorkoutHeader";
 import Footer from "../Components/Footer";
-import { db, auth } from "../Firebase/firebase-config";
-import AddGroup from "../Components/AddGroup";
+import { db } from "../Firebase/firebase-config";
 import { getDocs, collection } from "firebase/firestore";
+import AddCluster from "../Components/AddCluster";
 
-export default function Home({ navigation, GlobalState }) {
-  const {
-    groups,
-    setGroups,
-    setChosenGroup
-  } = GlobalState;
-  
+export default function ExerciseDetails({ route, navigation, GlobalState }) {
+  const { chosenGroup, chosenExercise, clusters, setClusters } = GlobalState;
+  const { path } = route.params;
+
   useEffect(() => {
     queryFirebase();
   }, []);
 
   const queryFirebase = async () => {
-    console.log("Reading groups from firebase");
-    const ref = collection(db, "Groups");
+    console.log("Reading clusters from firebase");
+    const ref = collection(db, path);
     const data = await getDocs(ref);
-    setGroups(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  };
-
-  const handleSignOut = () => {
-    auth
-      .signOut()
-      .then(() => {
-        navigation.replace("Login");
-      })
-      .catch((error) => alert(error.message));
-  };
-
-  const handleChooseGroup = (group) => {
-    setChosenGroup(group);
-    navigation.navigate("GroupDetails", {
-      path: "Groups/" + group.id + "/Exercises",
-    });
+    setClusters(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
 
   return (
     <View style={styles.screen}>
       <WorkoutHeader />
       <View style={styles.body}>
-        <Text style={styles.text}>Email: {auth.currentUser?.email}</Text>
-        <TouchableOpacity style={styles.button} onPress={() => handleSignOut()}>
-          <Text style={styles.buttonText}>Sign Out</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.buttonText}>Back</Text>
         </TouchableOpacity>
 
-        <AddGroup GlobalState={GlobalState} queryFirebase={queryFirebase} />
+        <Text style={styles.text}>{chosenExercise.name}</Text>
 
-        {groups.map((group) => {
+        <AddCluster
+          GlobalState={GlobalState}
+          queryFirebase={queryFirebase}
+          chosenGroup={chosenGroup}
+          chosenExercise={chosenExercise}
+        />
+
+        {clusters.map((cluster) => {
           return (
-            <TouchableOpacity
-              style={styles.item}
-              key={group.id}
-              onPress={() => handleChooseGroup(group)}
-            >
-              <Text>Name: {group.name}</Text>
+            <TouchableOpacity style={styles.cluster} key={cluster.id}>
+              <Text>Sets: {cluster.sets}</Text>
+              <Text>Reps: {cluster.reps}</Text>
+              <Text>Weight: {cluster.weight}</Text>
             </TouchableOpacity>
           );
         })}
@@ -70,6 +64,10 @@ export default function Home({ navigation, GlobalState }) {
 }
 
 const styles = StyleSheet.create({
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   screen: {
     flex: 1,
     backgroundColor: "#fff",
@@ -81,7 +79,7 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#14141410",
   },
-  item: {
+  cluster: {
     backgroundColor: "white",
     padding: 10,
     margin: 10,
@@ -94,6 +92,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
+  },
+  text: {
+    textAlign: "center",
+    paddingTop: 30,
   },
   button: {
     alignItems: "center",
@@ -116,9 +118,5 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     font: "900",
-  },
-  text: {
-    textAlign: "center",
-    paddingTop: 30,
   },
 });
