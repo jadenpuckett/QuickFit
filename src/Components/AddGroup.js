@@ -6,7 +6,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Keyboard
+  Keyboard,
 } from "react-native";
 
 import { db } from "../Firebase/firebase-config";
@@ -33,30 +33,40 @@ export default function AddGroup({ GlobalState, queryFirebase }) {
   };
 
   return (
-    <View>
-      <TextInput
-        style={styles.input}
-        onChangeText={(inp) => setGroupToAdd(inp)}
-        value={groupToAdd}
-        multiline={true}
-        autoCapitalize="none"
-        placeholder="Enter a new group name..."
-      />
-      <TouchableOpacity style={styles.button} onPress={() => addGroup()}>
-        <Text style={styles.buttonText}>Add Group</Text>
-      </TouchableOpacity>
+    <View style={styles.addgroup}>
+      <Text style={styles.label}>Add a Group</Text>
+      <View style={styles.row}>
+        <TextInput
+          style={styles.input}
+          onChangeText={(inp) => setGroupToAdd(inp)}
+          value={groupToAdd}
+          multiline={true}
+          autoCapitalize="none"
+          placeholder="Group name..."
+        />
+        <TouchableOpacity style={styles.button} onPress={() => addGroup()}>
+          <Text style={styles.buttonText}>Add Group</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  addgroup: {
+    marginVertical: 20,
+    marginHorizontal: 20,
+  },
+  row: {
+    flexDirection: "row",
+    height: 40,
+    marginTop: 10,
+  },
   input: {
+    width: "75%",
     backgroundColor: "white",
-    padding: 15,
-    paddingTop: 10,
-    paddingBottom: 10,
-    margin: 10,
-    // marginTop: 30,
+    padding: 10,
+    marginRight: 10,
     borderRadius: 12,
     shadowColor: "#000",
     shadowOffset: {
@@ -68,13 +78,10 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   button: {
+    width: "25%",
     alignItems: "center",
     backgroundColor: "black",
-    padding: 15,
-    paddingTop: 10,
-    paddingBottom: 10,
-    margin: 10,
-    marginBottom: 30,
+    padding: 10,
     borderRadius: 12,
     shadowColor: "#000",
     shadowOffset: {
@@ -88,5 +95,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     font: "900",
+  },
+  label: {
+    fontWeight: "bold",
   },
 });

@@ -8,12 +8,8 @@ import AddGroup from "../Components/AddGroup";
 import { getDocs, collection } from "firebase/firestore";
 
 export default function Home({ navigation, GlobalState }) {
-  const {
-    groups,
-    setGroups,
-    setChosenGroup
-  } = GlobalState;
-  
+  const { groups, setGroups, setChosenGroup } = GlobalState;
+
   useEffect(() => {
     queryFirebase();
   }, []);
@@ -44,6 +40,7 @@ export default function Home({ navigation, GlobalState }) {
   return (
     <View style={styles.screen}>
       <WorkoutHeader />
+
       <View style={styles.body}>
         <Text style={styles.text}>Email: {auth.currentUser?.email}</Text>
         <TouchableOpacity style={styles.button} onPress={() => handleSignOut()}>
@@ -52,6 +49,8 @@ export default function Home({ navigation, GlobalState }) {
 
         <AddGroup GlobalState={GlobalState} queryFirebase={queryFirebase} />
 
+        <Text style={styles.label}>Groups</Text>
+
         {groups.map((group) => {
           return (
             <TouchableOpacity
@@ -59,11 +58,12 @@ export default function Home({ navigation, GlobalState }) {
               key={group.id}
               onPress={() => handleChooseGroup(group)}
             >
-              <Text>Name: {group.name}</Text>
+              <Text>{group.name}</Text>
             </TouchableOpacity>
           );
         })}
       </View>
+
       <Footer navigation={navigation} />
     </View>
   );
@@ -84,7 +84,8 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: "white",
     padding: 10,
-    margin: 10,
+    marginHorizontal: 20,
+    marginTop: 10,
     borderRadius: 12,
     shadowColor: "#000",
     shadowOffset: {
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     padding: 15,
     paddingTop: 10,
     paddingBottom: 10,
-    margin: 10,
+    margin: 20,
     marginBottom: 30,
     borderRadius: 12,
     shadowColor: "#000",
@@ -120,5 +121,9 @@ const styles = StyleSheet.create({
   text: {
     textAlign: "center",
     paddingTop: 30,
+  },
+  label: {
+    fontWeight: "bold",
+    marginLeft: 20,
   },
 });

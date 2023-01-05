@@ -6,7 +6,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Keyboard
+  Keyboard,
 } from "react-native";
 
 import { db } from "../Firebase/firebase-config";
@@ -47,46 +47,56 @@ export default function AddCluster({
   };
 
   return (
-    <View>
-      <TextInput
-        style={styles.input}
-        onChangeText={(inp) => setSetsToAdd(inp)}
-        value={setsToAdd}
-        multiline={true}
-        autoCapitalize="none"
-        placeholder="Enter a number of sets..."
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={(inp) => setRepsToAdd(inp)}
-        value={repsToAdd}
-        multiline={true}
-        autoCapitalize="none"
-        placeholder="Enter a number of reps..."
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={(inp) => setWeightToAdd(inp)}
-        value={weightToAdd}
-        multiline={true}
-        autoCapitalize="none"
-        placeholder="Enter a weight amount..."
-      />
-      <TouchableOpacity style={styles.button} onPress={() => addCluster()}>
-        <Text style={styles.buttonText}>Add Cluster</Text>
-      </TouchableOpacity>
+    <View style={styles.addCluster}>
+      <Text style={styles.label}>Add a Cluster</Text>
+      <View style={styles.row}>
+        <TextInput
+          style={styles.input}
+          onChangeText={(inp) => setSetsToAdd(inp)}
+          value={setsToAdd}
+          multiline={true}
+          autoCapitalize="none"
+          placeholder="Sets..."
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={(inp) => setRepsToAdd(inp)}
+          value={repsToAdd}
+          multiline={true}
+          autoCapitalize="none"
+          placeholder="Reps..."
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={(inp) => setWeightToAdd(inp)}
+          value={weightToAdd}
+          multiline={true}
+          autoCapitalize="none"
+          placeholder="Weight..."
+        />
+        <TouchableOpacity style={styles.button} onPress={() => addCluster()}>
+          <Text style={styles.buttonText}>Add Cluster</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  addCluster: {
+    marginVertical: 20,
+    marginHorizontal: 20,
+  },
+  row: {
+    flexDirection: "row",
+    height: 40,
+    marginTop: 10,
+  },
   input: {
+    width: "75%",
     backgroundColor: "white",
-    padding: 15,
-    paddingTop: 10,
-    paddingBottom: 10,
-    margin: 10,
-    // marginTop: 30,
+    padding: 10,
+    marginRight: 10,
     borderRadius: 12,
     shadowColor: "#000",
     shadowOffset: {
@@ -98,13 +108,10 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   button: {
+    width: "25%",
     alignItems: "center",
     backgroundColor: "black",
-    padding: 15,
-    paddingTop: 10,
-    paddingBottom: 10,
-    margin: 10,
-    marginBottom: 30,
+    padding: 10,
     borderRadius: 12,
     shadowColor: "#000",
     shadowOffset: {
@@ -118,5 +125,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     font: "900",
+  },
+  label: {
+    fontWeight: "bold",
   },
 });

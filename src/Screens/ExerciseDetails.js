@@ -48,6 +48,8 @@ export default function ExerciseDetails({ route, navigation, GlobalState }) {
           chosenExercise={chosenExercise}
         />
 
+        <Text style={styles.label}>Clusters</Text>
+
         {clusters.map((cluster) => {
           return (
             <TouchableOpacity style={styles.cluster} key={cluster.id}>
@@ -82,7 +84,8 @@ const styles = StyleSheet.create({
   cluster: {
     backgroundColor: "white",
     padding: 10,
-    margin: 10,
+    marginHorizontal: 20,
+    marginTop: 10,
     borderRadius: 12,
     shadowColor: "#000",
     shadowOffset: {
@@ -94,17 +97,19 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   text: {
-    textAlign: "center",
-    paddingTop: 30,
+    color: "blue",
+    fontWeight: "bold",
+    marginHorizontal: 20,
+    fontSize: 32,
   },
   button: {
+    width: "25%",
     alignItems: "center",
     backgroundColor: "black",
     padding: 15,
     paddingTop: 10,
     paddingBottom: 10,
-    margin: 10,
-    marginBottom: 30,
+    margin: 20,
     borderRadius: 12,
     shadowColor: "#000",
     shadowOffset: {
@@ -118,5 +123,9 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     font: "900",
+  },
+  label: {
+    fontWeight: "bold",
+    marginLeft: 20,
   },
 });
