@@ -7,14 +7,14 @@ export default function Footer({ navigation }) {
       <Icon
         name="home"
         size={30}
-        color="#141414"
+        color="white"
         onPress={() => navigation.navigate("Home")}
       />
       <Icon
         name="user"
         size={30}
-        color="#141414"
-        // onPress={() => navigation.navigate("Profile")}
+        color="white"
+        onPress={() => navigation.navigate("Profile")}
       />
     </View>
   );
@@ -23,19 +23,19 @@ export default function Footer({ navigation }) {
 const styles = StyleSheet.create({
   footer: {
     paddingHorizontal: 50,
-    flexDirection: 'row',
+    flexDirection: "row",
     flex: 1,
     width: "100%",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "white",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
+    backgroundColor: "black",
+    // shadowColor: "#000",
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 6,
+    // },
+    // shadowOpacity: 0.37,
+    // shadowRadius: 7.49,
     elevation: 12,
     zIndex: 5,
     borderTopWidth: 1,

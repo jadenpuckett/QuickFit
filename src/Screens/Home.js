@@ -8,7 +8,7 @@ import AddGroup from "../Components/AddGroup";
 import { getDocs, collection } from "firebase/firestore";
 
 export default function Home({ navigation, GlobalState }) {
-  const { groups, setGroups, setChosenGroup } = GlobalState;
+  const { groups, setGroups, setChosenGroup, email } = GlobalState;
 
   useEffect(() => {
     queryFirebase();
@@ -16,24 +16,15 @@ export default function Home({ navigation, GlobalState }) {
 
   const queryFirebase = async () => {
     console.log("Reading groups from firebase");
-    const ref = collection(db, "Groups");
+    const ref = collection(db, "Users/" + email + "/Groups");
     const data = await getDocs(ref);
     setGroups(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  };
-
-  const handleSignOut = () => {
-    auth
-      .signOut()
-      .then(() => {
-        navigation.replace("Login");
-      })
-      .catch((error) => alert(error.message));
   };
 
   const handleChooseGroup = (group) => {
     setChosenGroup(group);
     navigation.navigate("GroupDetails", {
-      path: "Groups/" + group.id + "/Exercises",
+      path: "Users/" + email + "/Groups/" + group.id + "/Exercises",
     });
   };
 
@@ -42,11 +33,6 @@ export default function Home({ navigation, GlobalState }) {
       <WorkoutHeader />
 
       <View style={styles.body}>
-        <Text style={styles.text}>Email: {auth.currentUser?.email}</Text>
-        <TouchableOpacity style={styles.button} onPress={() => handleSignOut()}>
-          <Text style={styles.buttonText}>Sign Out</Text>
-        </TouchableOpacity>
-
         <AddGroup GlobalState={GlobalState} queryFirebase={queryFirebase} />
 
         <Text style={styles.label}>Groups</Text>
@@ -77,11 +63,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   body: {
-    flex: 8,
+    flex: 9,
     width: "100%",
     backgroundColor: "#14141410",
   },
   item: {
+    justifyContent: "center",
     backgroundColor: "white",
     padding: 10,
     marginHorizontal: 20,
@@ -120,7 +107,7 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: "center",
-    paddingTop: 30,
+    paddingTop: 20,
   },
   label: {
     fontWeight: "bold",

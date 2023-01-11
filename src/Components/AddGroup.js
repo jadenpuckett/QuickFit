@@ -12,11 +12,12 @@ import {
 import { db } from "../Firebase/firebase-config";
 
 export default function AddGroup({ GlobalState, queryFirebase }) {
+    const { email } = GlobalState;
   const [groupToAdd, setGroupToAdd] = useState("");
 
   const addGroup = async () => {
     if (groupToAdd && groupToAdd.length > 0) {
-      const dbRef = collection(db, "Groups");
+      const dbRef = collection(db, "Users/" + email + "/Groups");
       const data = {
         name: groupToAdd,
       };

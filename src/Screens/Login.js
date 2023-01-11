@@ -10,12 +10,13 @@ import React, { useEffect, useState } from "react";
 import { auth } from "../Firebase/firebase-config";
 
 export default function Login({ navigation, GlobalState }) {
-  const [email, setEmail] = useState("");
+  const { email, setEmail } = GlobalState;
   const [password, setPassword] = useState("");
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
+        setEmail("jadenpuckett32@gmail.com"); //DELETE this from this file when not testing
         navigation.replace("Home"); //use navigate instead of replace to add the IOS automatically added back button
       }
     });

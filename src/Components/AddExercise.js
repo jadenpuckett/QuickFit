@@ -16,11 +16,15 @@ export default function AddExercise({
   queryFirebase,
   chosenGroup,
 }) {
+    const { email } = GlobalState;
   const [exerciseToAdd, setExerciseToAdd] = useState("");
 
   const addExercise = async () => {
     if (exerciseToAdd && exerciseToAdd.length > 0) {
-      const dbRef = collection(db, "Groups/" + chosenGroup.id + "/Exercises");
+      const dbRef = collection(
+        db,
+        "Users/" + email + "/Groups/" + chosenGroup.id + "/Exercises"
+      );
       const data = {
         name: exerciseToAdd,
       };

@@ -21,6 +21,7 @@ import Login from "./src/Screens/Login";
 import Home from "./src/Screens/Home";
 import GroupDetails from "./src/Screens/GroupDetails";
 import ExerciseDetails from "./src/Screens/ExerciseDetails";
+import Profile from "./src/Screens/Profile";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,7 @@ export default function App() {
   registerNNPushToken(5368, "6UNQ6ckAm0sCcbBRw3DUDj");
 
   // globalstate managmenet
+  const [email, setEmail] = useState("");
   const [groups, setGroups] = useState([]);
   const [chosenGroup, setChosenGroup] = useState("");
   const [exercises, setExercises] = useState([]);
@@ -36,6 +38,8 @@ export default function App() {
   const [clusters, setClusters] = useState([]);
 
   const GlobalState = {
+    email,
+    setEmail,
     groups,
     setGroups,
     chosenGroup,
@@ -66,6 +70,10 @@ export default function App() {
 
         <Stack.Screen name="ExerciseDetails" options={{ headerShown: false }}>
           {(props) => <ExerciseDetails {...props} GlobalState={GlobalState} />}
+        </Stack.Screen>
+
+        <Stack.Screen name="Profile" options={{ headerShown: false }}>
+          {(props) => <Profile {...props} GlobalState={GlobalState} />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

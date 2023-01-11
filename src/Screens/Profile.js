@@ -7,19 +7,8 @@ import { db, auth } from "../Firebase/firebase-config";
 import AddGroup from "../Components/AddGroup";
 import { getDocs, collection } from "firebase/firestore";
 
-export default function Home({ navigation, GlobalState }) {
-  const { groups, setGroups, setChosenGroup } = GlobalState;
-
-  useEffect(() => {
-    queryFirebase();
-  }, []);
-
-  const queryFirebase = async () => {
-    console.log("Reading groups from firebase");
-    const ref = collection(db, "Groups");
-    const data = await getDocs(ref);
-    setGroups(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  };
+export default function Profile({ navigation, GlobalState }) {
+  useEffect(() => {}, []);
 
   const handleSignOut = () => {
     auth
@@ -30,35 +19,15 @@ export default function Home({ navigation, GlobalState }) {
       .catch((error) => alert(error.message));
   };
 
-  const handleChooseGroup = (group) => {
-    setChosenGroup(group);
-    navigation.navigate("GroupDetails", {
-      path: "Groups/" + group.id + "/Exercises",
-    });
-  };
-
   return (
     <View style={styles.screen}>
       <WorkoutHeader />
+      {/* MAKE A NEW PROFILE HEADER LATER */}
       <View style={styles.body}>
         <Text style={styles.text}>Email: {auth.currentUser?.email}</Text>
         <TouchableOpacity style={styles.button} onPress={() => handleSignOut()}>
           <Text style={styles.buttonText}>Sign Out</Text>
         </TouchableOpacity>
-
-        <AddGroup GlobalState={GlobalState} queryFirebase={queryFirebase} />
-
-        {groups.map((group) => {
-          return (
-            <TouchableOpacity
-              style={styles.item}
-              key={group.id}
-              onPress={() => handleChooseGroup(group)}
-            >
-              <Text>Name: {group.name}</Text>
-            </TouchableOpacity>
-          );
-        })}
       </View>
       <Footer navigation={navigation} />
     </View>
@@ -73,7 +42,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   body: {
-    flex: 8,
+    flex: 9,
     width: "100%",
     backgroundColor: "#14141410",
   },
@@ -115,6 +84,6 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: "center",
-    paddingTop: 30,
+    paddingTop: 20,
   },
 });

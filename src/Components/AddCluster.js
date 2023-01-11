@@ -17,6 +17,7 @@ export default function AddCluster({
   chosenGroup,
   chosenExercise,
 }) {
+    const { email } = GlobalState;
   const [setsToAdd, setSetsToAdd] = useState();
   const [repsToAdd, setRepsToAdd] = useState();
   const [weightToAdd, setWeightToAdd] = useState();
@@ -24,7 +25,9 @@ export default function AddCluster({
   const addCluster = async () => {
     const dbRef = collection(
       db,
-      "Groups/" +
+      "Users/" +
+        email +
+        "/Groups/" +
         chosenGroup.id +
         "/Exercises/" +
         chosenExercise.id +

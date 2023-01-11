@@ -14,7 +14,8 @@ import { getDocs, collection } from "firebase/firestore";
 import AddCluster from "../Components/AddCluster";
 
 export default function ExerciseDetails({ route, navigation, GlobalState }) {
-  const { chosenGroup, chosenExercise, clusters, setClusters } = GlobalState;
+  const { chosenGroup, chosenExercise, clusters, setClusters, email } =
+    GlobalState;
   const { path } = route.params;
 
   useEffect(() => {
@@ -32,13 +33,6 @@ export default function ExerciseDetails({ route, navigation, GlobalState }) {
     <View style={styles.screen}>
       <WorkoutHeader />
       <View style={styles.body}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.buttonText}>Back</Text>
-        </TouchableOpacity>
-
         <Text style={styles.text}>{chosenExercise.name}</Text>
 
         <AddCluster
@@ -59,6 +53,13 @@ export default function ExerciseDetails({ route, navigation, GlobalState }) {
             </TouchableOpacity>
           );
         })}
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.buttonText}>Back</Text>
+        </TouchableOpacity>
       </View>
       <Footer navigation={navigation} />
     </View>
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   body: {
-    flex: 8,
+    flex: 9,
     width: "100%",
     backgroundColor: "#14141410",
   },
@@ -101,6 +102,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginHorizontal: 20,
     fontSize: 32,
+    paddingTop: 20,
   },
   button: {
     width: "25%",

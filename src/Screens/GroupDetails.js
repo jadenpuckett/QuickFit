@@ -14,6 +14,7 @@ export default function GroupDetails({ route, navigation, GlobalState }) {
     setExercises,
     setChosenExercise,
     setWorkoutHeaderText,
+    email,
   } = GlobalState;
   const { path } = route.params;
 
@@ -32,7 +33,13 @@ export default function GroupDetails({ route, navigation, GlobalState }) {
     setChosenExercise(exercise);
     navigation.navigate("ExerciseDetails", {
       path:
-        "Groups/" + chosenGroup.id + "/Exercises/" + exercise.id + "/Clusters",
+        "Users/" +
+        email +
+        "/Groups/" +
+        chosenGroup.id +
+        "/Exercises/" +
+        exercise.id +
+        "/Clusters",
     });
   };
 
@@ -40,13 +47,6 @@ export default function GroupDetails({ route, navigation, GlobalState }) {
     <View style={styles.screen}>
       <WorkoutHeader />
       <View style={styles.body}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.buttonText}>Back</Text>
-        </TouchableOpacity>
-
         <Text style={styles.text}>{chosenGroup.name}</Text>
 
         <AddExercise
@@ -68,6 +68,13 @@ export default function GroupDetails({ route, navigation, GlobalState }) {
             </TouchableOpacity>
           );
         })}
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.buttonText}>Back</Text>
+        </TouchableOpacity>
       </View>
       <Footer navigation={navigation} />
     </View>
@@ -82,7 +89,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   body: {
-    flex: 8,
+    flex: 9,
     width: "100%",
     backgroundColor: "#14141410",
     marginHorizontal: 50,
@@ -106,10 +113,11 @@ const styles = StyleSheet.create({
     color: "blue",
     fontWeight: "bold",
     marginHorizontal: 20,
-    fontSize: 32
+    fontSize: 32,
+    paddingTop: 20,
   },
   button: {
-    width: '25%',
+    width: "25%",
     alignItems: "center",
     backgroundColor: "black",
     padding: 15,
